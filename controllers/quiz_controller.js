@@ -11,3 +11,9 @@ exports.answer = function(req, res){
       res.render('quizes/answer', {respuesta: 'Incorrecto'});
     }
 }
+
+//GET /quizes/creditos
+exports.author = function(req, res){
+  res.render('author', {autor: 'Trini Vázquez Fernández'
+  });
+}
