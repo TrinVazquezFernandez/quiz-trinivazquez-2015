@@ -29,8 +29,21 @@ exports.answer = function(req, res){
 }
 
 //GET /quizes
+// exports.index = function(req, res){
+//   models.Quiz.findAll().then(
+//     function(quizes){
+//       res.render('quizes/index.ejs', {quizes:quizes});
+//     }
+//   ).catch(function(error){next(error);});
+// }
+
+//GET /quizes?search=texto_a_buscar
 exports.index = function(req, res){
-  models.Quiz.findAll().then(
+  var busqueda = '';
+  if (req.query.search){
+    busqueda += '%' + req.query.search.replace(' ', '%') + '%'
+  }
+  models.Quiz.findAll({where:['pregunta like ?', busqueda]}).then(
     function(quizes){
       res.render('quizes/index.ejs', {quizes:quizes});
     }
