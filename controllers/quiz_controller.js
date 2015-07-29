@@ -42,12 +42,20 @@ exports.index = function(req, res){
   var busqueda = '';
   if (req.query.search){
     busqueda += '%' + req.query.search.replace(' ', '%') + '%'
+    models.Quiz.findAll({where:['pregunta like ?', busqueda], order: 'pregunta ASC'}).then(
+      function(quizes){
+        res.render('quizes/index.ejs', {quizes:quizes});
+      }
+    ).catch(function(error){next(error);});
   }
-  models.Quiz.findAll({where:['pregunta like ?', busqueda]}).then(
-    function(quizes){
-      res.render('quizes/index.ejs', {quizes:quizes});
-    }
-  ).catch(function(error){next(error);});
+  else{
+          models.Quiz.findAll().then(function(quizes) {
+              res.render('quizes/index.ejs', {quizes: quizes});
+          }).catch(function(error) {
+              new(error);
+          });
+
+  }
 }
 
 //GET /quizes/creditos
