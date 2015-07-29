@@ -28,15 +28,6 @@ exports.answer = function(req, res){
   res.render('quizes/answer', { quiz: req.quiz, respuesta: resultado});
 }
 
-//GET /quizes
-// exports.index = function(req, res){
-//   models.Quiz.findAll().then(
-//     function(quizes){
-//       res.render('quizes/index.ejs', {quizes:quizes});
-//     }
-//   ).catch(function(error){next(error);});
-// }
-
 //GET /quizes?search=texto_a_buscar
 exports.index = function(req, res){
   var busqueda = '';
@@ -57,6 +48,24 @@ exports.index = function(req, res){
 
   }
 }
+
+//GET /quizes/id
+exports.new = function(req, res){
+  var quiz = models.Quiz.build(
+    {pregunta: "Pregunta", respuesta: "Respuesta"}
+  );
+  res.render('quizes/new', {quiz: quiz});
+}
+
+//POST /quizes/create
+exports.create = function(req, res){
+  var quiz = models.Quiz.build(req.body.quiz);
+  //guarda en BD los campos pregunta y respuesta de quiz
+  quiz.save({fields: ["pregunta", "respuesta"]}).then(function(){
+    res.redirect("/quizes");
+  });
+}
+
 
 //GET /quizes/creditos
 exports.author = function(req, res){
