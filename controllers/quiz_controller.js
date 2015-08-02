@@ -107,6 +107,17 @@ exports.update = function(req, res){
     });
 }
 
+//DELETE /quizes/:id
+exports.destroy = function(req, res){
+  req.quiz.destroy()
+  .then(
+    function(){
+          res.redirect("/quizes");
+      }
+  ).catch(function(error){next(error)});
+}
+
+
 //GET /quizes/creditos
 exports.author = function(req, res){
   res.render('author', {autor: 'Trini Vázquez Fernández', errors:[]});
