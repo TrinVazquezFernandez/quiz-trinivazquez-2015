@@ -1,5 +1,5 @@
 var models = require('../models/models.js');
-
+var temas = ["Otro", "Humanidades", "Ocio", "Ciencia", "Tecnologia" ]
 //Autoload - factoriza el código se ruta incluye :quizId
 exports.load = function(req, res, next, quizId){
   models.Quiz.findById(quizId).then(
@@ -31,8 +31,7 @@ exports.answer = function(req, res){
 //GET /quizes/:id/edit
 exports.edit = function(req, res){
   var quiz = req.quiz;
-  console.log("Tema:" + quiz.tema);
-  res.render('quizes/edit', { quiz: quiz, errors:[]});
+  res.render('quizes/edit', { quiz: quiz, temas:temas, errors:[]});
 }
 
 //GET /quizes?search=texto_a_buscar
@@ -61,7 +60,7 @@ exports.new = function(req, res){
   var quiz = models.Quiz.build(
     {pregunta: "Pregunta", respuesta: "Respuesta", tema: "Tema"}
   );
-  res.render('quizes/new', {quiz: quiz, errors:[]});
+  res.render('quizes/new', {quiz: quiz, temas:temas, errors:[]});
 }
 
 //POST /quizes/create
@@ -100,7 +99,7 @@ exports.update = function(req, res){
       else{
         //guarda en BD los cambios en la pregunta y la respuesta de quiz
         req.quiz
-        .save({fields: ["pregunta", "respuesta"]})
+        .save({fields: ["pregunta", "respuesta", "tema"]})
         .then(function(){
           res.redirect("/quizes");
         });
