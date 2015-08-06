@@ -12,21 +12,25 @@ router.get('/', function(req, res) {
 
 //Autoload de comandos con: quizeId
 router.param('quizId', quizController.load); //autoload :quizeId
+router.param('commentId', commentController.load); //autoload :commentId
 
 router.get('/login', sessionController.new);
 router.post('/login', sessionController.login);
 router.get('/logout', sessionController.destroy);
 
-router.get('/quizes', quizController.index);
-router.get('/quizes/:quizId(\\d+)', quizController.show);
-router.get('/quizes/:quizId(\\d+)/answer', quizController.answer);
-router.get('/quizes/new', sessionController.loginRequired, quizController.new);
-router.post('/quizes/create', sessionController.loginRequired, quizController.create);
-router.put('/quizes/:quizId(\\d+)', sessionController.loginRequired, quizController.update);
-router.delete('/quizes/:quizId(\\d+)', sessionController.loginRequired, quizController.destroy);
-router.get('/quizes/:quizId(\\d+)/edit', sessionController.loginRequired, quizController.edit);
+router.get('/quizes', sessionController.validateSession, quizController.index);
+router.get('/quizes/:quizId(\\d+)', sessionController.validateSession, quizController.show);
+router.get('/quizes/:quizId(\\d+)/answer', sessionController.validateSession, quizController.answer);
+router.get('/quizes/new', sessionController.validateSession, sessionController.loginRequired, quizController.new);
+router.post('/quizes/create', sessionController.validateSession, sessionController.loginRequired, quizController.create);
+router.put('/quizes/:quizId(\\d+)', sessionController.validateSession, sessionController.loginRequired, quizController.update);
+router.delete('/quizes/:quizId(\\d+)', sessionController.validateSession, sessionController.loginRequired, quizController.destroy);
+router.get('/quizes/:quizId(\\d+)/edit', sessionController.validateSession, sessionController.loginRequired, quizController.edit);
 
-router.get('/quizes/:quizId(\\d+)/comments/new', commentController.new);
-router.post('/quizes/:quizId(\\d+)/comments', commentController.create);
+router.get('/quizes/:quizId(\\d+)/comments/new', sessionController.validateSession, commentController.new);
+router.post('/quizes/:quizId(\\d+)/comments',sessionController.validateSession, commentController.create);
+router.get('/quizes/:quizId(\\d+)/comments/:commentId(\\d+)/publish',
+          sessionController.validateSession, sessionController.loginRequired, commentController.publish);
+
 router.get('/author', quizController.author);
 module.exports = router;
